@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privatlivspolitik — mail-assistant</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; color: #333; }
+    h1, h2 { color: #111; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+    th { background: #f5f5f5; }
+    code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+    hr { border: none; border-top: 1px solid #eee; margin: 30px 0; }
+  </style>
+</head>
+<body>
+
+<h1>Privatlivspolitik — mail-assistant</h1>
+
+<h2>Google OAuth-verifikation</h2>
+<p>mail-assistant bruger Google OAuth 2.0 til at tilgå Google Tasks på vegne af brugeren.
+Applikationen anmoder udelukkende om følgende OAuth-scope:</p>
+
+<table>
+  <tr><th>Scope</th><th>Formål</th></tr>
+  <tr><td><code>https://www.googleapis.com/auth/tasks</code></td><td>Læse og oprette/opdatere opgaver i Google Tasks</td></tr>
+</table>
+
+<p>Der anmodes <strong>ikke</strong> om adgang til Gmail, Google Drev, Kalender eller andre Google-tjenester.</p>
+
+<hr>
+
+<h2>Hvilke data tilgås</h2>
+
+<h3>Google Tasks</h3>
+<ul>
+  <li><strong>Læsning:</strong> Åbne opgaver med titel og forfaldsdato — bruges til at opdage om en opgave allerede er oprettet eller afsluttet.</li>
+  <li><strong>Skrivning:</strong> Oprettelse af nye opgaver (titel, prioritet, forfaldsdato) og markering af opgaver som udført.</li>
+</ul>
+
+<h3>IMAP-mails</h3>
+<ul>
+  <li>Mailindhold (emne, afsender, brødtekst) hentes fra den konfigurerede IMAP-server og sendes til det valgte LLM for klassificering.</li>
+  <li>Ved brug af <strong>Ollama</strong> (lokal model) forlader mailindholdet <strong>aldrig</strong> din server — al behandling sker i din egen infrastruktur.</li>
+  <li>Ved brug af <strong>Anthropic</strong> eller <strong>Mistral</strong> API sendes mailindhold til den pågældende udbyders API. Det er brugerens ansvar at sikre overensstemmelse med gældende regler.</li>
+</ul>
+
+<hr>
+
+<h2>Data forlader ikke serveren (Ollama)</h2>
+<p>Når <code>LLM_PROVIDER=ollama</code> er konfigureret:</p>
+<ul>
+  <li>Behandles alle mails lokalt på din server</li>
+  <li>Ingen maildata sendes til Anthropic, Mistral eller andre tredjeparter</li>
+  <li>Google Tasks-API er den eneste udgående forbindelse</li>
+</ul>
+
+<hr>
+
+<h2>Datalagring</h2>
+<table>
+  <tr><th>Data</th><th>Placering</th><th>Indhold</th></tr>
+  <tr><td><code>data/seen.db</code></td><td>Lokal SQLite</td><td>Message-ID, emne, afsender, behandlingsstatus — ikke mailindhold</td></tr>
+  <tr><td><code>data/google_token.pickle</code></td><td>Lokal fil</td><td>Google OAuth-token — roteres automatisk</td></tr>
+  <tr><td><code>credentials/google_credentials.json</code></td><td>Lokal fil</td><td>Google OAuth client credentials</td></tr>
+</table>
+<p>Ingen data sendes til applikationsudvikleren. Der er ingen telemetri, ingen analytics og ingen cloud-backup.</p>
+
+<hr>
+
+<h2>Tilbagekaldelse af adgang</h2>
+<p>Google-adgang kan til enhver tid tilbagekaldes via
+<a href="https://myaccount.google.com/permissions">Google-kontostyring</a>
+under „Tredjepartsapps med kontorettigheder“.</p>
+<p>Lokal token slettes ved: <code>rm data/google_token.pickle</code></p>
+
+<hr>
+
+<h2>Kontakt</h2>
+<p>Spørgsmål kan rettes via <a href="https://github.com/pzipp/mail-assistant/issues">GitHub Issues</a>.</p>
+
+</body>
+</html>

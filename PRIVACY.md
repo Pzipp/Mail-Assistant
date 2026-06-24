@@ -1,8 +1,3 @@
----
-layout: default
-title: Privatlivspolitik
----
-
 # Privatlivspolitik — mail-assistant
 
 ## Google OAuth-verifikation

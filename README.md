@@ -1,8 +1,3 @@
----
-layout: default
-title: mail-assistant
----
-
 # mail-assistant
 
 IMAP → LLM → Google Tasks pipeline der automatisk klassificerer indkommende mails og opretter opgaver i Google Tasks.
