@@ -1,0 +1,61 @@
+services:
+  mail-assistant:
+    build: .
+    container_name: mail-assistant
+    restart: unless-stopped
+
+    environment:
+      - TZ=Europe/Copenhagen
+
+      - IMAP_HOST=${IMAP_HOST}
+      - IMAP_PORT=${IMAP_PORT:-993}
+      - IMAP_USER=${IMAP_USER}
+      - IMAP_PASSWORD=${IMAP_PASSWORD}
+      - IMAP_FOLDER=${IMAP_FOLDER:-INBOX}
+      - IMAP_FOLDER_PREFIX=${IMAP_FOLDER_PREFIX:-}
+      - IMAP_ARCHIVE_FOLDER=${IMAP_ARCHIVE_FOLDER:-Archive}
+
+      - LLM_PROVIDER=${LLM_PROVIDER:-ollama}
+      - LLM_TIMEOUT=${LLM_TIMEOUT:-600}
+      - LLM_BATCH_SIZE=${LLM_BATCH_SIZE:-1}
+      - LLM_DEBUG=${LLM_DEBUG:-false}
+
+      - OLLAMA_HOST=${OLLAMA_HOST:-http://ollama:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen2.5:0.5b}
+      - OLLAMA_NUM_CTX=${OLLAMA_NUM_CTX:-2048}
+      - OLLAMA_NUM_THREAD=${OLLAMA_NUM_THREAD:-2}
+
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-haiku-4-5-20251001}
+
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+      - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-small-latest}
+
+      - CLAUDE_CODE_HOST=${CLAUDE_CODE_HOST:-http://claude-code:11578}
+      - CLAUDE_CODE_TIMEOUT=${CLAUDE_CODE_TIMEOUT:-300}
+
+      - GOOGLE_TASKLIST=${GOOGLE_TASKLIST:-@default}
+
+      - SCAN_FROM_DATE=${SCAN_FROM_DATE:-}
+      - MAX_MAILS=${MAX_MAILS:-30}
+
+      - DEADLINE_FALLBACK_DAYS=${DEADLINE_FALLBACK_DAYS:-0}
+
+      - COMPLETE_ON_ANSWERED=${COMPLETE_ON_ANSWERED:-true}
+      - COMPLETE_ON_ARCHIVED=${COMPLETE_ON_ARCHIVED:-true}
+      - FLAG_ON_PRIORITY=${FLAG_ON_PRIORITY:-}
+
+      - SCHEDULE_TIMES=${SCHEDULE_TIMES:-07:00,09:00,12:00,15:00,18:00,21:00}
+
+    volumes:
+      - ./data:/data
+      - ./credentials:/credentials
+
+    ports:
+      - "8080:8080"
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
