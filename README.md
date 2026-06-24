@@ -123,6 +123,16 @@ En FastAPI REST-service kører sideløbende på port `8080` med endpoints til:
 
 ---
 
+## Vilkår for brug
+
+Dette er open source software udgivet under [MIT-licensen](LICENSE).
+
+Softwaren leveres som den er, uden garanti af nogen art. Brugeren er selv ansvarlig for opsætning, drift og eventuelle konsekvenser af brugen. Udvikleren påtager sig intet ansvar for tab af data, utilsigtet adgang til mailkonti eller andre skader der måtte opstå ved brug af softwaren.
+
+Ved at bruge softwaren accepterer du MIT-licensens betingelser.
+
+---
+
 ## Licens
 
 MIT — se [LICENSE](LICENSE)
