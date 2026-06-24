@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Policy &mdash; mail-assistant</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.7;
+    }
+    header {
+      background: #1a73e8;
+      color: white;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    header h1 { font-size: 2rem; font-weight: 600; }
+    header p  { margin-top: 10px; font-size: 1rem; opacity: 0.9; }
+    nav {
+      background: #1558c0;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 12px 24px;
+    }
+    nav a { color: #cce0ff; text-decoration: none; font-size: 0.9rem; }
+    nav a:hover { color: white; }
+    main {
+      max-width: 780px;
+      margin: 48px auto;
+      padding: 0 24px 80px;
+    }
+    section { margin-bottom: 40px; }
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1a73e8;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e8f0fe;
+    }
+    h3 { margin: 16px 0 8px; font-size: 1rem; }
+    ul { padding-left: 20px; }
+    ul li { margin-bottom: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e0e0e0; }
+    th { background: #f1f3f4; font-weight: 600; }
+    code {
+      background: #f1f3f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #888;
+      padding: 24px;
+      border-top: 1px solid #e0e0e0;
+    }
+    footer a { color: #1a73e8; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Privacy Policy</h1>
+  <p>mail-assistant &mdash; last updated 2026-06-24</p>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="privacy.html">Privacy Policy</a>
+  <a href="https://github.com/pzipp/mail-assistant">GitHub</a>
+</nav>
+
+<main>
+
+  <section>
+    <h2>Google OAuth &amp; API access</h2>
+    <p>mail-assistant uses Google OAuth 2.0 to access Google Tasks on your behalf.
+    Only the following scope is requested:</p>
+    <br>
+    <table>
+      <tr><th>Scope</th><th>Purpose</th></tr>
+      <tr>
+        <td><code>https://www.googleapis.com/auth/tasks</code></td>
+        <td>Read, create and update tasks in Google Tasks</td>
+      </tr>
+    </table>
+    <br>
+    <p>No access to Gmail, Google Drive, Google Calendar or any other Google service is requested.</p>
+  </section>
+
+  <section>
+    <h2>What data is accessed</h2>
+    <h3>Google Tasks</h3>
+    <ul>
+      <li><strong>Read:</strong> Open tasks with title and due date &mdash; used to detect whether a task has already been created or completed.</li>
+      <li><strong>Write:</strong> Creating new tasks (title, priority, due date) and marking tasks as completed.</li>
+    </ul>
+    <h3>IMAP emails</h3>
+    <ul>
+      <li>Email content (subject, sender, body) is fetched from your configured IMAP server and sent to the selected LLM for classification.</li>
+      <li>When using <strong>Ollama</strong> (local model), email content <strong>never leaves your server</strong> &mdash; all processing happens in your own infrastructure.</li>
+      <li>When using <strong>Anthropic</strong> or <strong>Mistral</strong> APIs, email content is sent to that provider&rsquo;s API. It is the user&rsquo;s responsibility to ensure compliance with applicable regulations and data processing agreements.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Data stays on your server (Ollama)</h2>
+    <p>When <code>LLM_PROVIDER=ollama</code> is configured:</p>
+    <ul>
+      <li>All emails are processed locally on your own server</li>
+      <li>No email data is sent to Anthropic, Mistral or any third party</li>
+      <li>The only outbound connection is to the Google Tasks API</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Data stored locally</h2>
+    <table>
+      <tr><th>Data</th><th>Location</th><th>Contents</th></tr>
+      <tr>
+        <td><code>data/seen.db</code></td>
+        <td>Local SQLite</td>
+        <td>Message-ID, subject, sender, processing status &mdash; <strong>not</strong> email body</td>
+      </tr>
+      <tr>
+        <td><code>data/google_token.pickle</code></td>
+        <td>Local file</td>
+        <td>Google OAuth token &mdash; refreshed automatically</td>
+      </tr>
+      <tr>
+        <td><code>credentials/google_credentials.json</code></td>
+        <td>Local file</td>
+        <td>Google OAuth client credentials</td>
+      </tr>
+    </table>
+    <br>
+    <p>No data is sent to the application developer.
+    There is no telemetry, no analytics and no cloud backup.</p>
+  </section>
+
+  <section>
+    <h2>Revoking access</h2>
+    <p>Google access can be revoked at any time via
+    <a href="https://myaccount.google.com/permissions">Google Account &rarr; Third-party apps with account access</a>.</p>
+    <p style="margin-top:8px">To delete the local token: <code>rm data/google_token.pickle</code></p>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>Questions regarding this privacy policy can be raised via
+    <a href="https://github.com/pzipp/mail-assistant/issues">GitHub Issues</a>.</p>
+  </section>
+
+</main>
+
+<footer>
+  <a href="/">pzipp.dk</a> &middot;
+  <a href="index.html">mail-assistant</a> &middot;
+  <a href="https://github.com/pzipp/mail-assistant/blob/main/LICENSE">MIT License</a>
+</footer>
+
+</body>
+</html>

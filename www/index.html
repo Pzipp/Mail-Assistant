@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mail-assistant</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.7;
+    }
+    header {
+      background: #1a73e8;
+      color: white;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    header h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.5px; }
+    header p  { margin-top: 10px; font-size: 1.05rem; opacity: 0.9; }
+    nav {
+      background: #1558c0;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 12px 24px;
+    }
+    nav a { color: #cce0ff; text-decoration: none; font-size: 0.9rem; }
+    nav a:hover { color: white; }
+    main {
+      max-width: 780px;
+      margin: 48px auto;
+      padding: 0 24px 80px;
+    }
+    section { margin-bottom: 48px; }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a73e8;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e8f0fe;
+    }
+    ul { padding-left: 20px; }
+    ul li { margin-bottom: 6px; }
+    .badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 0.8rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-right: 6px;
+    }
+    .badge.no {
+      background: #fce8e6;
+      color: #c62828;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e0e0e0; }
+    th { background: #f1f3f4; font-weight: 600; }
+    code {
+      background: #f1f3f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+    }
+    .links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .links a {
+      display: inline-block;
+      padding: 10px 22px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .btn-primary { background: #1a73e8; color: white; }
+    .btn-primary:hover { background: #1558c0; }
+    .btn-secondary { background: #e8f0fe; color: #1a73e8; }
+    .btn-secondary:hover { background: #d2e3fc; }
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #888;
+      padding: 24px;
+      border-top: 1px solid #e0e0e0;
+    }
+    footer a { color: #1a73e8; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>mail-assistant</h1>
+  <p>IMAP &rarr; LLM &rarr; Google Tasks &mdash; automatic email triage for your inbox</p>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="privacy.html">Privacy Policy</a>
+  <a href="https://github.com/pzipp/mail-assistant">GitHub</a>
+</nav>
+
+<main>
+
+  <section>
+    <h2>What it does</h2>
+    <ul>
+      <li>Connects to your IMAP mailbox and fetches new emails since a configurable start date</li>
+      <li>Sends each email to an LLM (Ollama, Anthropic Claude, or Mistral) for classification</li>
+      <li>Creates a Google Task with priority and due date when an email requires action</li>
+      <li>Moves emails to suggested IMAP folders</li>
+      <li>Automatically marks tasks as done when the email is replied to or archived</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>What it never does</h2>
+    <ul>
+      <li><span class="badge no">never</span> Deletes emails &mdash; no EXPUNGE or DELETE</li>
+      <li><span class="badge no">never</span> Marks emails as read</li>
+      <li><span class="badge no">never</span> Replies to or sends emails</li>
+      <li><span class="badge no">never</span> Sends email content to third parties when using Ollama</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Google API access</h2>
+    <p>mail-assistant uses Google OAuth 2.0 to access Google Tasks on your behalf.
+    Only the following scope is requested:</p>
+    <br>
+    <table>
+      <tr><th>Scope</th><th>Purpose</th></tr>
+      <tr>
+        <td><code>https://www.googleapis.com/auth/tasks</code></td>
+        <td>Read, create and update tasks in Google Tasks</td>
+      </tr>
+    </table>
+    <br>
+    <p>No access to Gmail, Google Drive, Calendar or any other Google service is requested.</p>
+  </section>
+
+  <section>
+    <h2>Requirements</h2>
+    <table>
+      <tr><th>Requirement</th><th>Details</th></tr>
+      <tr><td>Docker &amp; Docker Compose</td><td>&ge; 24</td></tr>
+      <tr><td>IMAP server with SSL</td><td>Port 993</td></tr>
+      <tr><td>LLM provider</td><td>Ollama (local), Anthropic API, or Mistral API</td></tr>
+      <tr><td>Google Cloud project</td><td>With Tasks API enabled</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Terms of use</h2>
+    <p>This is open source software released under the
+    <a href="https://github.com/pzipp/mail-assistant/blob/main/LICENSE">MIT license</a>.</p>
+    <p style="margin-top:10px">The software is provided as-is, without warranty of any kind.
+    The user is solely responsible for setup, operation and any consequences of use.
+    The developer assumes no liability for data loss, unintended mailbox access
+    or any other damages arising from use of this software.</p>
+  </section>
+
+  <section>
+    <div class="links">
+      <a class="btn-primary" href="https://github.com/pzipp/mail-assistant">View on GitHub</a>
+      <a class="btn-secondary" href="privacy.html">Privacy Policy</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <a href="/">pzipp.dk</a> &middot;
+  <a href="privacy.html">Privacy Policy</a> &middot;
+  <a href="https://github.com/pzipp/mail-assistant/blob/main/LICENSE">MIT License</a>
+</footer>
+
+</body>
+</html>
